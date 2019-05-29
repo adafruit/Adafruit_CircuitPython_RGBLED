@@ -94,7 +94,6 @@ class RGBLED:
             color = self._set_duty_cycle(value[i])
             print(color)
             self._rgb_led_pins[i].duty_cycle=color
-            print(self._rgb_led_pins[i].duty_cycle)
 
     def _set_duty_cycle(self, percent):
         """Converts a given percent value into a 16-bit
