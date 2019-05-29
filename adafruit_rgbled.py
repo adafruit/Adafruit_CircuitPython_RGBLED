@@ -47,11 +47,13 @@ class RGBLED:
     """
     RGB LED Driver Class.
     """
-    def __init__(self, red_pin, green_pin, blue_pin, brightness=1.0):
+    def __init__(self, red_pin, green_pin, blue_pin, brightness=1.0, frequency = 0):
         """Initializes a RGB LED.
         :param int red_pin: Red Anode Pin.
         :param int green_pin: Green Anode Pin.
         :param int blue_pin: Blue Anode Pin.
+        :param float brightness: Optional RGB LED brightness.
+        :param int frequency: 32 bit PWM frequency value, in Hz.
         """
         self._red_led = pulseio.PWMOut(red_pin, variable_frequency=True)
         self._green_led = pulseio.PWMOut(green_pin, variable_frequency=True)
@@ -67,6 +69,19 @@ class RGBLED:
             pin.duty_cycle = 0
             pin.deinit()
         self._current_color = None
+
+    @property
+    def frequency(self):
+        """Returns the frequency of the RGB LED.
+        """
+        return self.frequency
+    
+    @frequency.setter
+    def frequency(self, frequency_val):
+        """Sets the RGB LED's PWM frequency.
+        :param int frequency: 32 bit frequency value, in Hz.
+        """
+        self.frequency = frequency_val
 
     @property
     def brightness(self):
@@ -86,7 +101,7 @@ class RGBLED:
         :param type value: RGB LED desired value - can be a tuple, 24-bit integer,
         or a hex value.
         """
-        print('Setting to: ', value)
+        print('Setting to ', value)
         if isinstance(value, tuple):
             for i in range(0,3):
                 color = self._set_duty_cycle(value[i])
@@ -94,6 +109,14 @@ class RGBLED:
         elif isinstance(value, int):
             if value>>24:
                 raise ValueError("only bits 0->23 valid for integer input")
+            r = value >> 16
+            g = (value >> 8) & 0xff
+            b = value & 0xff
+            rgb = (r, g, b)
+            for i in range(0,3):
+                color = self._set_duty_cycle(rgb[i])
+                print(color)
+                self._rgb_led_pins[i].duty_cycle=color
 
     def _set_duty_cycle(self, percent):
         """Converts a given percent value into a 16-bit
