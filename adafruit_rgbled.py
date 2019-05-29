@@ -87,13 +87,13 @@ class RGBLED:
         or a hex value.
         """
         print('Setting to: ', value)
-        if isinstance(value, int):
+        if isinstance(value, tuple):
+            for i in range(0,3):
+                color = self._set_duty_cycle(value[i])
+                self._rgb_led_pins[i].duty_cycle=color
+        elif isinstance(value, int):
             if value>>24:
                 raise ValueError("only bits 0->23 valid for integer input")
-        for i in range(0,3):
-            color = self._set_duty_cycle(value[i])
-            print(color)
-            self._rgb_led_pins[i].duty_cycle=color
 
     def _set_duty_cycle(self, percent):
         """Converts a given percent value into a 16-bit
