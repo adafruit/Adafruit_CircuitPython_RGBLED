@@ -37,7 +37,7 @@ Implementation Notes
 
 * Adafruit's SimpleIO library: https://github.com/adafruit/Adafruit_CircuitPython_SimpleIO
 """
-import pulseio
+from pulseio import PWMOut
 from simpleio import map_range
 
 __version__ = "0.0.0-auto.0"
@@ -54,9 +54,9 @@ class RGBLED:
         :param int blue_pin: Blue Anode Pin.
         :param bool invert_pwm: Use inverted PWM (Common anode).
         """
-        self._red_led = pulseio.PWMOut(red_pin)
-        self._green_led = pulseio.PWMOut(green_pin)
-        self._blue_led = pulseio.PWMOut(blue_pin)
+        self._red_led = PWMOut(red_pin)
+        self._green_led = PWMOut(green_pin)
+        self._blue_led = PWMOut(blue_pin)
         self._rgb_led_pins = [self._red_led, self._green_led, self._blue_led]
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
@@ -65,6 +65,7 @@ class RGBLED:
     def deinit(self):
         """Turn the LEDs off, deinit pwmout and release hardware resources."""
         for pin in self._rgb_led_pins:
+            #pylint: no-member
             pin.deinit()
 
     @property
