@@ -47,7 +47,7 @@ while True:
     led.color = (0, 0, 255)
     time.sleep(1)
 
-    # setting RGB LED color to 24-bit integer values 
+    # setting RGB LED color to 24-bit integer values
     led.color = 0xFF0000
     time.sleep(1)
 
@@ -56,6 +56,6 @@ while True:
 
     led.color = 0x0000FF
     time.sleep(1)
-    
+
     # rainbow cycle the RGB LED
     rainbow_cycle(0.1)

@@ -81,7 +81,7 @@ class RGBLED:
         self._current_color = value
         if isinstance(value, tuple) and is_percent:
             for i in range(0, 3):
-                color = self._set_duty_cycle(value[i])
+                color = self._convert_percent_to_duty_cycle(value[i])
                 self._rgb_led_pins[i].duty_cycle = color
         elif isinstance(value, tuple):
             for i in range(0, 3):
@@ -104,7 +104,7 @@ class RGBLED:
         else:
             raise ValueError('Color must be a tuple or 24-bit integer value.')
 
-    def _set_duty_cycle(self, percent):
+    def _convert_percent_to_duty_cycle(self, percent):
         """Converts a percentage into a 16-bit duty_cycle integer value.
         :param int percent: Percentage value, from 0% to 100%.
         """
