@@ -73,17 +73,12 @@ class RGBLED:
         return self._current_color
 
     @color.setter
-    def color(self, value, is_percent=False):
+    def color(self, value):
         """Sets the RGB LED to a desired color.
         :param type value: RGB LED desired value - can be a RGB tuple or a 24-bit integer.
-        :param bool is_percent: Value is a tuple expressed in percentage, from 0% to 100%.
         """
         self._current_color = value
-        if isinstance(value, tuple) and is_percent:
-            for i in range(0, 3):
-                color = self._convert_percent_to_duty_cycle(value[i])
-                self._rgb_led_pins[i].duty_cycle = color
-        elif isinstance(value, tuple):
+        if isinstance(value, tuple):
             for i in range(0, 3):
                 color = int(map_range(value[i], 0, 255, 0, 65535))
                 if self._invert_pwm:
@@ -103,12 +98,3 @@ class RGBLED:
                 self._rgb_led_pins[color].duty_cycle = abs(rgb[color])
         else:
             raise ValueError('Color must be a tuple or 24-bit integer value.')
-
-    def _convert_percent_to_duty_cycle(self, percent):
-        """Converts a percentage into a 16-bit duty_cycle integer value.
-        :param int percent: Percentage value, from 0% to 100%.
-        """
-        if self._invert_pwm:
-            data = int(percent / 100.0 * 65535.0) - 65535
-            return abs(data)
-        return int(percent / 100.0 * 65535.0)
