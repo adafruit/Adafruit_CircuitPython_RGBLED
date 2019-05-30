@@ -12,10 +12,10 @@ GREEN_LED = board.D6
 BLUE_LED = board.D7
 
 # Create the RGB LED object
-led = adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7)
+led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED)
 
 # Optionally, you can also create the RGB LED object with inverted PWM
-# led = adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True)
+# led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED, invert_pwm=True)
 
 def wheel(pos):
     # Input a value 0 to 255 to get a color value.

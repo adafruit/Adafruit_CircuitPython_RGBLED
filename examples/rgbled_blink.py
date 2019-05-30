@@ -13,10 +13,10 @@ CLEAR = (0, 0, 0)       # clear (or second color)
 DELAY = 0.25            # blink rate in seconds
 
 # Create the RGB LED object
-led = adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7)
+led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED)
 
-# Optionally create the RGB LED object with inverted PWM
-# led = adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True)
+# Optionally, you can also create the RGB LED object with inverted PWM
+# led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED, invert_pwm=True)
 
 # Loop forever and blink the color
 while True:
