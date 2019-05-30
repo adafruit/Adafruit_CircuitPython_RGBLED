@@ -47,7 +47,7 @@ class RGBLED:
     """
     RGB LED Driver Class.
     """
-    def __init__(self, red_pin, green_pin, blue_pin, brightness=1.0, frequency = 0):
+    def __init__(self, red_pin, green_pin, blue_pin, brightness=1.0, frequency = 500, invert_pwm=False):
         """Initializes a RGB LED.
         :param int red_pin: Red Anode Pin.
         :param int green_pin: Green Anode Pin.
@@ -55,11 +55,12 @@ class RGBLED:
         :param float brightness: Optional RGB LED brightness.
         :param int frequency: 32 bit PWM frequency value, in Hz.
         """
-        self._red_led = pulseio.PWMOut(red_pin, variable_frequency=True)
-        self._green_led = pulseio.PWMOut(green_pin, variable_frequency=True)
-        self._blue_led = pulseio.PWMOut(blue_pin, variable_frequency=True)
-        self._rgb_led_pins = [self._red_led, self._blue_led, self._green_led]
+        self._red_led = pulseio.PWMOut(red_pin, frequency = frequency)
+        self._green_led = pulseio.PWMOut(green_pin, frequency = frequency)
+        self._blue_led = pulseio.PWMOut(blue_pin, frequency = frequency)
+        self._rgb_led_pins = [self._red_led, self._green_led, self._blue_led]
         self._brightness = brightness
+        self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
         self.color = self._current_color
 
@@ -122,14 +123,12 @@ class RGBLED:
             raise ValueError('Color must be a tuple or 24-bit integer value.')
 
     def _set_duty_cycle(self, percent):
-        """Converts a given percent value into a 16-bit
-        integer, duty_cycle.
+        """Converts a provided percentage into a 16-bit integer duty_cycle.
+        :param int percent: Percentage value, from 0% to 100%.
         """
-        data = int(percent / 100.0 * 65535.0)
-        data -= 65535
-        print('Disp:', data)
-        if data < 0:
-            data = abs(data)
-        print('Disp2: ', data)
-        return data
-        # return int(percent / 100.0 * 65535.0)
+        if self._invert_pwm:
+            data = int(percent / 100.0 * 65535.0) - 65535
+            if data < 0:
+                data = abs(data)
+            return data
+        return int(percent / 100.0 * 65535.0)
