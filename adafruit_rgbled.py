@@ -84,7 +84,10 @@ class RGBLED:
                 self._rgb_led_pins[i].duty_cycle = color
         elif isinstance(value, tuple):
             for i in range(0, 3):
-                self._rgb_led_pins[i].duty_cycle = int(map_range(value[i], 0, 255, 0, 65535))
+                color = int(map_range(value[i], 0, 255, 0, 65535))
+                if self._invert_pwm:
+                    color -= 65535
+                self._rgb_led_pins[i].duty_cycle = abs(color)
         elif isinstance(value, int):
             if value>>24:
                 raise ValueError("Only bits 0->23 valid for integer input")
