@@ -25,7 +25,6 @@
 
 CircuitPython driver for RGB LEDs
 
-
 * Author(s): Brent Rubell
 
 Implementation Notes
@@ -35,9 +34,9 @@ Implementation Notes
 
 * Adafruit CircuitPython firmware for the supported boards:
   https://github.com/adafruit/circuitpython/releases
+
+* Adafruit's SimpleIO library: https://github.com/adafruit/Adafruit_CircuitPython_SimpleIO
 """
-import math
-from board import *
 from pulseio import PWMOut
 from simpleio import map_range
 
@@ -66,8 +65,7 @@ class RGBLED:
         self.color = self._current_color
 
     def deinit(self):
-        """Turn the LEDs off, deinit pwmout and release hardware resources.
-        """
+        """Turn the LEDs off, deinit pwmout and release hardware resources."""
         for pin in pins:
             pin.duty_cycle = 0
             pin.deinit()
@@ -75,8 +73,7 @@ class RGBLED:
 
     @property
     def frequency(self):
-        """Returns the frequency of the RGB LED.
-        """
+        """Returns the frequency of the RGB LED."""
         return self.frequency
     
     @frequency.setter
@@ -88,14 +85,12 @@ class RGBLED:
 
     @property
     def brightness(self):
-        """Returns the brightness of the RGB LED.
-        """
+        """Returns the brightness of the RGB LED."""
         return self._brightness
     
     @property
     def color(self):
-        """Returns the RGB LED's current color.
-        """
+        """Returns the RGB LED's current color."""
         return self._current_color
 
     @color.setter
@@ -109,35 +104,24 @@ class RGBLED:
                 self._rgb_led_pins[i].duty_cycle=color
         elif isinstance(value, int):
             if value>>24:
-                raise ValueError("only bits 0->23 valid for integer input")
+                raise ValueError("Only bits 0->23 valid for integer input")
             r = value >> 16
             g = (value >> 8) & 0xff
             b = value & 0xff
             rgb = [r, g, b]
-            print('RGB: ', rgb)
             for color in range(0, 3):
-                print('Color: ', rgb[color])
                 rgb[color] = int(map_range(rgb[color], 0, 255, 0, 65535))
-                print(rgb[color])
-            print(rgb)
-            if self._invert_pwm:
-                rgb[0] -= 65535
-                rgb[1] -= 65535
-                rgb[2] -= 65535
-            print('Invert: ', rgb)
-            self._rgb_led_pins[0].duty_cycle = abs(rgb[0])
-            self._rgb_led_pins[1].duty_cycle = abs(rgb[1])
-            self._rgb_led_pins[2].duty_cycle = abs(rgb[2])
+                if self._invert_pwm:
+                    rgb[color] -= 65535
+                self._rgb_led_pins[color].duty_cycle = abs(rgb[color])
         else:
             raise ValueError('Color must be a tuple or 24-bit integer value.')
 
     def _set_duty_cycle(self, percent):
-        """Converts a provided percentage into a 16-bit integer duty_cycle.
+        """Converts a percentage into a 16-bit duty_cycle integer value.
         :param int percent: Percentage value, from 0% to 100%.
         """
         if self._invert_pwm:
             data = int(percent / 100.0 * 65535.0) - 65535
-            if data < 0:
-                data = abs(data)
-            return data
+            return abs(data)
         return int(percent / 100.0 * 65535.0)
