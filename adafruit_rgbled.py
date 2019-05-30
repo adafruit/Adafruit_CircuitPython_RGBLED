@@ -38,7 +38,8 @@ Implementation Notes
 """
 import math
 from board import *
-import pulseio
+from pulseio import PWMOut
+from simpleio import map_range
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_RGBLED.git"
@@ -55,9 +56,9 @@ class RGBLED:
         :param float brightness: Optional RGB LED brightness.
         :param bool invert_pwm: Use inverted PWM (Common anode).
         """
-        self._red_led = pulseio.PWMOut(red_pin)
-        self._green_led = pulseio.PWMOut(green_pin)
-        self._blue_led = pulseio.PWMOut(blue_pin)
+        self._red_led = PWMOut(red_pin)
+        self._green_led = PWMOut(green_pin)
+        self._blue_led = PWMOut(blue_pin)
         self._rgb_led_pins = [self._red_led, self._green_led, self._blue_led]
         self._brightness = brightness
         self._invert_pwm = invert_pwm
@@ -97,18 +98,6 @@ class RGBLED:
         """
         return self._current_color
 
-    def map_range(self, x, in_min, in_max, out_min, out_max):
-        """
-        Maps a number from one range to another.
-        Note: This implementation handles values < in_min differently than arduino's map function does.
-        :return: Returns value mapped to new range
-        :rtype: float
-        """
-        mapped = (x-in_min) * (out_max - out_min) / (in_max-in_min) + out_min
-        if out_min <= out_max:
-            return max(min(mapped, out_max), out_min)
-        return min(max(mapped, out_max), out_min)
-
     @color.setter
     def color(self, value):
         """Sets the RGB LED to a desired color.
@@ -124,13 +113,12 @@ class RGBLED:
             if value>>24:
                 raise ValueError("only bits 0->23 valid for integer input")
             r = value >> 16
-            print(r)
             g = (value >> 8) & 0xff
             b = value & 0xff
-            print('RGB Val: ', r, g, b)
-            r = int(self.map_range(r, 0, 255, 0, 65535))
-            g = int(self.map_range(g, 0, 255, 0, 65535))
-            b = int(self.map_range(b, 0, 255, 0, 65535))
+            rgb = (r, g, b)
+            r = int(map_range(r, 0, 255, 0, 65535))
+            g = int(map_range(g, 0, 255, 0, 65535))
+            b = int(map_range(b, 0, 255, 0, 65535))
             print('post map: ', r, g, b)
             if self._invert_pwm:
                 r -= 65535
