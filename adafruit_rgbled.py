@@ -61,6 +61,7 @@ class RGBLED:
         self._rgb_led_pins = [self._red_led, self._blue_led, self._green_led]
         self._brightness = brightness
         self._current_color = (0, 0, 0)
+        self.color = self._current_color
 
     def deinit(self):
         """Turn the LEDs off, deinit pwmout and release hardware resources.
@@ -98,7 +99,8 @@ class RGBLED:
     @color.setter
     def color(self, value):
         """Sets the RGB LED to a desired color.
-        :param type value: RGB LED desired value - can be a tuple or a 24-bit integer.
+        :param type value: RGB LED desired value - can be a tuple, 24-bit integer,
+
         """
         print('Setting to ', value)
         if isinstance(value, tuple):
@@ -123,4 +125,11 @@ class RGBLED:
         """Converts a given percent value into a 16-bit
         integer, duty_cycle.
         """
-        return int(percent / 100.0 * 65535.0)
+        data = int(percent / 100.0 * 65535.0)
+        data -= 65535
+        print('Disp:', data)
+        if data < 0:
+            data = abs(data)
+        print('Disp2: ', data)
+        return data
+        # return int(percent / 100.0 * 65535.0)
