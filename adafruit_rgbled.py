@@ -47,47 +47,26 @@ class RGBLED:
     """
     RGB LED Driver Class.
     """
-    def __init__(self, red_pin, green_pin, blue_pin, brightness=1.0, invert_pwm=False):
+    def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
         """Initializes a RGB LED.
         :param int red_pin: Red Anode Pin.
         :param int green_pin: Green Anode Pin.
         :param int blue_pin: Blue Anode Pin.
-        :param float brightness: Optional RGB LED brightness.
         :param bool invert_pwm: Use inverted PWM (Common anode).
         """
         self._red_led = PWMOut(red_pin)
         self._green_led = PWMOut(green_pin)
         self._blue_led = PWMOut(blue_pin)
         self._rgb_led_pins = [self._red_led, self._green_led, self._blue_led]
-        self._brightness = brightness
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
         self.color = self._current_color
 
     def deinit(self):
         """Turn the LEDs off, deinit pwmout and release hardware resources."""
-        for pin in pins:
-            pin.duty_cycle = 0
+        for pin in self._rgb_led_pins:
             pin.deinit()
-        self._current_color = None
 
-    @property
-    def frequency(self):
-        """Returns the frequency of the RGB LED."""
-        return self.frequency
-    
-    @frequency.setter
-    def frequency(self, frequency_val):
-        """Sets the RGB LED's PWM frequency.
-        :param int frequency: 32 bit frequency value, in Hz.
-        """
-        self.frequency = frequency_val
-
-    @property
-    def brightness(self):
-        """Returns the brightness of the RGB LED."""
-        return self._brightness
-    
     @property
     def color(self):
         """Returns the RGB LED's current color."""
@@ -99,9 +78,9 @@ class RGBLED:
         :param type value: RGB LED desired value - can be a tuple, 24-bit integer,
         """
         if isinstance(value, tuple):
-            for i in range(0,3):
+            for i in range(0, 3):
                 color = self._set_duty_cycle(value[i])
-                self._rgb_led_pins[i].duty_cycle=color
+                self._rgb_led_pins[i].duty_cycle = color
         elif isinstance(value, int):
             if value>>24:
                 raise ValueError("Only bits 0->23 valid for integer input")
