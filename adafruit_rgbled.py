@@ -47,17 +47,17 @@ class RGBLED:
     """
     RGB LED Driver Class.
     """
-    def __init__(self, red_pin, green_pin, blue_pin, brightness=1.0, frequency = 500, invert_pwm=False):
+    def __init__(self, red_pin, green_pin, blue_pin, brightness=1.0, invert_pwm=False):
         """Initializes a RGB LED.
         :param int red_pin: Red Anode Pin.
         :param int green_pin: Green Anode Pin.
         :param int blue_pin: Blue Anode Pin.
         :param float brightness: Optional RGB LED brightness.
-        :param int frequency: 32 bit PWM frequency value, in Hz.
+        :param bool invert_pwm: Use inverted PWM (Common anode).
         """
-        self._red_led = pulseio.PWMOut(red_pin, frequency = frequency)
-        self._green_led = pulseio.PWMOut(green_pin, frequency = frequency)
-        self._blue_led = pulseio.PWMOut(blue_pin, frequency = frequency)
+        self._red_led = pulseio.PWMOut(red_pin)
+        self._green_led = pulseio.PWMOut(green_pin)
+        self._blue_led = pulseio.PWMOut(blue_pin)
         self._rgb_led_pins = [self._red_led, self._green_led, self._blue_led]
         self._brightness = brightness
         self._invert_pwm = invert_pwm
@@ -97,6 +97,18 @@ class RGBLED:
         """
         return self._current_color
 
+    def map_range(self, x, in_min, in_max, out_min, out_max):
+        """
+        Maps a number from one range to another.
+        Note: This implementation handles values < in_min differently than arduino's map function does.
+        :return: Returns value mapped to new range
+        :rtype: float
+        """
+        mapped = (x-in_min) * (out_max - out_min) / (in_max-in_min) + out_min
+        if out_min <= out_max:
+            return max(min(mapped, out_max), out_min)
+        return min(max(mapped, out_max), out_min)
+
     @color.setter
     def color(self, value):
         """Sets the RGB LED to a desired color.
@@ -112,13 +124,22 @@ class RGBLED:
             if value>>24:
                 raise ValueError("only bits 0->23 valid for integer input")
             r = value >> 16
+            print(r)
             g = (value >> 8) & 0xff
             b = value & 0xff
-            rgb = (r, g, b)
-            for i in range(0,3):
-                color = self._set_duty_cycle(rgb[i])
-                print(color)
-                self._rgb_led_pins[i].duty_cycle=color
+            print('RGB Val: ', r, g, b)
+            r = int(self.map_range(r, 0, 255, 0, 65535))
+            g = int(self.map_range(g, 0, 255, 0, 65535))
+            b = int(self.map_range(b, 0, 255, 0, 65535))
+            print('post map: ', r, g, b)
+            if self._invert_pwm:
+                r -= 65535
+                g -= 65535
+                b -= 65535
+            print('Invert: ', r, g, b)
+            self._rgb_led_pins[0].duty_cycle = abs(r)
+            self._rgb_led_pins[1].duty_cycle = abs(g)
+            self._rgb_led_pins[2].duty_cycle = abs(b)
         else:
             raise ValueError('Color must be a tuple or 24-bit integer value.')
 
