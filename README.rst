@@ -53,7 +53,40 @@ To install in a virtual environment in your current project:
 Usage Example
 =============
 
-.. todo:: Add a quick, simple example. It and other examples should live in the examples folder and be included in docs/examples.rst.
+This example demonstrates the library with the single built-in NeoPixel on the
+`Feather M0 Express <https://www.adafruit.com/product/3403>`_ and
+`Metro M0 Express <https://www.adafruit.com/product/3505>`_.
+
+Initialize a RGB LED with three PWM-capable pins.
+
+.. code-block:: python
+
+    import board
+    import adafruit_rgbled
+
+    # Pin the Red LED is connected to
+    RED_LED = board.D5
+
+    # Pin the Green LED is connected to
+    GREEN_LED = board.D6
+
+    # Pin the Blue LED is connected to
+    BLUE_LED = board.D7
+
+    # Create a RGB LED object
+    led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
+
+Set the RGB LED's color to a RGB Tuple (Red, Green, Blue).
+
+.. code-block:: python
+
+    led.color = (255, 0, 0)
+
+Set the RGB LED's color to a 24-bit integer (in hex syntax), 0x100000.
+
+.. code-block:: python
+    
+    led.color = (255, 0, 0)
 
 Contributing
 ============
