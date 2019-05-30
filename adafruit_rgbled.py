@@ -102,9 +102,7 @@ class RGBLED:
     def color(self, value):
         """Sets the RGB LED to a desired color.
         :param type value: RGB LED desired value - can be a tuple, 24-bit integer,
-
         """
-        print('Setting to ', value)
         if isinstance(value, tuple):
             for i in range(0,3):
                 color = self._set_duty_cycle(value[i])
@@ -115,19 +113,21 @@ class RGBLED:
             r = value >> 16
             g = (value >> 8) & 0xff
             b = value & 0xff
-            rgb = (r, g, b)
-            r = int(map_range(r, 0, 255, 0, 65535))
-            g = int(map_range(g, 0, 255, 0, 65535))
-            b = int(map_range(b, 0, 255, 0, 65535))
-            print('post map: ', r, g, b)
+            rgb = [r, g, b]
+            print('RGB: ', rgb)
+            for color in range(0, 3):
+                print('Color: ', rgb[color])
+                rgb[color] = int(map_range(rgb[color], 0, 255, 0, 65535))
+                print(rgb[color])
+            print(rgb)
             if self._invert_pwm:
-                r -= 65535
-                g -= 65535
-                b -= 65535
-            print('Invert: ', r, g, b)
-            self._rgb_led_pins[0].duty_cycle = abs(r)
-            self._rgb_led_pins[1].duty_cycle = abs(g)
-            self._rgb_led_pins[2].duty_cycle = abs(b)
+                rgb[0] -= 65535
+                rgb[1] -= 65535
+                rgb[2] -= 65535
+            print('Invert: ', rgb)
+            self._rgb_led_pins[0].duty_cycle = abs(rgb[0])
+            self._rgb_led_pins[1].duty_cycle = abs(rgb[1])
+            self._rgb_led_pins[2].duty_cycle = abs(rgb[2])
         else:
             raise ValueError('Color must be a tuple or 24-bit integer value.')
 
