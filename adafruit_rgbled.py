@@ -60,8 +60,8 @@ class RGBLED:
         self._blue_led = pulseio.PWMOut(blue_pin, variable_frequency=True)
         self._rgb_led_pins = [self._red_led, self._blue_led, self._green_led]
         self._brightness = brightness
-        self._current_color = 'Off'
-    
+        self._current_color = (0, 0, 0)
+
     def deinit(self):
         """Turn the LEDs off, deinit pwmout and release hardware resources.
         """
@@ -98,8 +98,7 @@ class RGBLED:
     @color.setter
     def color(self, value):
         """Sets the RGB LED to a desired color.
-        :param type value: RGB LED desired value - can be a tuple, 24-bit integer,
-        or a hex value.
+        :param type value: RGB LED desired value - can be a tuple or a 24-bit integer.
         """
         print('Setting to ', value)
         if isinstance(value, tuple):
@@ -117,6 +116,8 @@ class RGBLED:
                 color = self._set_duty_cycle(rgb[i])
                 print(color)
                 self._rgb_led_pins[i].duty_cycle=color
+        else:
+            raise ValueError('Color must be a tuple or 24-bit integer value.')
 
     def _set_duty_cycle(self, percent):
         """Converts a given percent value into a 16-bit
