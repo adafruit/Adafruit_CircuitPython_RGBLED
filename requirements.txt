@@ -1,2 +1,2 @@
 Adafruit-Blinka
-simpleio
+adafruit-circuitpython-simpleio
