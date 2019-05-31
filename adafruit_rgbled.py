@@ -45,15 +45,43 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_RGBLED.git"
 
 class RGBLED:
     """
-    RGB LED Driver Class.
+    A RGB LED.
+
+    :param ~microcontroller.Pin red_pin: The red RGB LED pin to output PWM on.
+    :param ~microcontroller.Pin green_pin: The green RGB LED pin to output PWM on.
+    :param ~microcontroller.Pin blue_pin: The blue RGB LED pin to output PWM on.
+    :param bool invert_pwm: False if the RGB LED is common cathode, true if the RGB LED is common anode.
+
+    Example for setting a RGB LED using a RGB Tuple (Red, Green, Blue):
+
+    .. code-block:: python
+        import board
+        import adafruit_rgbled
+
+        RED_LED = board.D5
+        GREEN_LED = board.D6
+        BLUE_LED = board.D7
+
+        # Create a RGB LED object
+        led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
+        led.color = (255, 0, 0)
+    
+    Example for setting a RGB LED using a 24-bit integer (hex syntax):
+
+    .. code-block:: python
+        import board
+        import adafruit_rgbled
+
+        RED_LED = board.D5
+        GREEN_LED = board.D6
+        BLUE_LED = board.D7
+
+        # Create a RGB LED object
+        led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
+        led.color = 0x100000
+
     """
     def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
-        """Initializes a RGB LED.
-        :param int red_pin: Red Anode Pin.
-        :param int green_pin: Green Anode Pin.
-        :param int blue_pin: Blue Anode Pin.
-        :param bool invert_pwm: Use inverted PWM (Common anode).
-        """
         self._red_led = PWMOut(red_pin)
         self._green_led = PWMOut(green_pin)
         self._blue_led = PWMOut(blue_pin)

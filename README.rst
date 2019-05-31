@@ -86,7 +86,7 @@ Set the RGB LED's color to a 24-bit integer (in hex syntax), 0x100000.
 
 .. code-block:: python
     
-    led.color = (255, 0, 0)
+    led.color = 0x100000
 
 Contributing
 ============
