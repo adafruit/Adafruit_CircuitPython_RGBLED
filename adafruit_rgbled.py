@@ -51,7 +51,7 @@ class RGBLED:
     :param ~microcontroller.Pin green_pin: The green RGB LED pin to output PWM on.
     :param ~microcontroller.Pin blue_pin: The blue RGB LED pin to output PWM on.
     :param bool invert_pwm: False if the RGB LED is common cathode,
-    true if the RGB LED is common anode.
+        true if the RGB LED is common anode.
 
     Example for setting a RGB LED using a RGB Tuple (Red, Green, Blue):
 
