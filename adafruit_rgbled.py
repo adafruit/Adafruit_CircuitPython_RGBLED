@@ -62,6 +62,12 @@ class RGBLED:
         self._current_color = (0, 0, 0)
         self.color = self._current_color
 
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exception_type, exception_value, traceback):
+        self.deinit()
+
     def deinit(self):
         """Turn the LEDs off, deinit pwmout and release hardware resources."""
         for pin in self._rgb_led_pins:
