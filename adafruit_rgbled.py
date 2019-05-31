@@ -80,6 +80,22 @@ class RGBLED:
         led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
         led.color = 0x100000
 
+    Example for setting a RGB LED using a ContextManager:
+
+    .. code-block:: python
+        import board
+        import adafruit_rgbled
+        with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7) as rgb_led:
+            rgb_led.color = (255, 0, 0)
+
+    Example for setting a common-anode RGB LED using a ContextManager:
+
+    .. code-block:: python
+        import board
+        import adafruit_rgbled
+        with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
+            rgb_led.color = (0, 255, 0)
+
     """
     def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
         self._red_led = PWMOut(red_pin)
