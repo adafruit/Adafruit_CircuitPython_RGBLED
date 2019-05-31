@@ -50,7 +50,8 @@ class RGBLED:
     :param ~microcontroller.Pin red_pin: The red RGB LED pin to output PWM on.
     :param ~microcontroller.Pin green_pin: The green RGB LED pin to output PWM on.
     :param ~microcontroller.Pin blue_pin: The blue RGB LED pin to output PWM on.
-    :param bool invert_pwm: False if the RGB LED is common cathode, true if the RGB LED is common anode.
+    :param bool invert_pwm: False if the RGB LED is common cathode,
+    true if the RGB LED is common anode.
 
     Example for setting a RGB LED using a RGB Tuple (Red, Green, Blue):
 
@@ -65,7 +66,7 @@ class RGBLED:
         # Create a RGB LED object
         led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
         led.color = (255, 0, 0)
-    
+
     Example for setting a RGB LED using a 24-bit integer (hex syntax):
 
     .. code-block:: python
@@ -108,7 +109,7 @@ class RGBLED:
 
     def __enter__(self):
         return self
-    
+
     def __exit__(self, exception_type, exception_value, traceback):
         self.deinit()
 
