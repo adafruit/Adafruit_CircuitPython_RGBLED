@@ -57,7 +57,7 @@ This example demonstrates the library with the single built-in NeoPixel on the
 `Feather M0 Express <https://www.adafruit.com/product/3403>`_ and
 `Metro M0 Express <https://www.adafruit.com/product/3505>`_.
 
-Initialize a RGB LED with three PWM-capable pins.
+Initialize a common-cathode RGB LED with three PWM-capable pins.
 
 .. code-block:: python
 
@@ -76,6 +76,25 @@ Initialize a RGB LED with three PWM-capable pins.
     # Create a RGB LED object
     led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
 
+Initialize a common-anode RGB LED with three PWM-capable pins 
+
+.. code-block:: python
+
+    import board
+    import adafruit_rgbled
+
+    # Pin the Red LED is connected to
+    RED_LED = board.D5
+
+    # Pin the Green LED is connected to
+    GREEN_LED = board.D6
+
+    # Pin the Blue LED is connected to
+    BLUE_LED = board.D7
+
+    # Create a RGB LED object
+    led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED, invert_pwm = True)
+
 Set the RGB LED's color to a RGB Tuple (Red, Green, Blue).
 
 .. code-block:: python
@@ -87,6 +106,14 @@ Set the RGB LED's color to a 24-bit integer (in hex syntax), 0x100000.
 .. code-block:: python
     
     led.color = 0x100000
+
+Setting a common-anode RGB LED using a ContextManager:
+
+.. code-block:: python
+    import board
+    import adafruit_rgbled
+    with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm = True) as rgb_led:
+        rgb_led.color = (0, 255, 0)
 
 Contributing
 ============
