@@ -47,9 +47,18 @@ class RGBLED:
     """
     A RGB LED.
 
-    :param ~microcontroller.Pin red_pin: The red RGB LED pin to output PWM on.
-    :param ~microcontroller.Pin green_pin: The green RGB LED pin to output PWM on.
-    :param ~microcontroller.Pin blue_pin: The blue RGB LED pin to output PWM on.
+    :param red_pin: The physical pin connected to a red LED anode.
+    :type ~microcontroller.Pin: Microcontroller's red_pin.
+    :type pulseio.PWMOut: PWMOut object associated with red_pin.
+    :type PWMChannel: PCA9685 PWM channel associated with red_pin.
+    :param green_pin: The physical pin connected to a green LED anode.
+    :type ~microcontroller.Pin: Microcontroller's green_pin.
+    :type pulseio.PWMOut: PWMOut object associated with green_pin.
+    :type PWMChannel: PCA9685 PWM channel associated with green_pin.
+    :param blue_pin: The physical pin connected to a blue LED anode.
+    :type ~microcontroller.Pin: Microcontroller's blue_pin.
+    :type pulseio.PWMOut: PWMOut object associated with blue_pin.
+    :type PWMChannel: PCA9685 PWM channel associated with blue_pin.
     :param bool invert_pwm: False if the RGB LED is common cathode,
         true if the RGB LED is common anode.
 
