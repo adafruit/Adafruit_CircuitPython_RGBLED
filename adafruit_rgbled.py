@@ -45,7 +45,7 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_RGBLED.git"
 
 class RGBLED:
     """
-    A RGB LED.
+    Creates a RGBLED object given three physical pins or PWMOut objects.
 
     :param red_pin: The physical pin connected to a red LED anode.
     :type ~microcontroller.Pin: Microcontroller's red_pin.
