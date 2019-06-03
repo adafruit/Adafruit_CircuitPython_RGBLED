@@ -111,6 +111,7 @@ Set the RGB LED's color to a 24-bit integer (in hex syntax), 0x100000.
 Setting a common-anode RGB LED using a ContextManager:
 
 .. code-block:: python
+
     import board
     import adafruit_rgbled
     with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm = True) as rgb_led:
