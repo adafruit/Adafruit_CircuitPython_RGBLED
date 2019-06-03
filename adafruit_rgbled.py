@@ -99,10 +99,11 @@ class RGBLED:
 
     """
     def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
-        self._red_led = PWMOut(red_pin)
-        self._green_led = PWMOut(green_pin)
-        self._blue_led = PWMOut(blue_pin)
-        self._rgb_led_pins = [self._red_led, self._green_led, self._blue_led]
+        self._rgb_led_pins = [red_pin, green_pin, blue_pin]
+        for i in range(len(self._rgb_led_pins)):
+            pin_type = str(type(self._rgb_led_pins[i]))
+            if pin_type == "<class 'Pin'>":
+                self._rgb_led_pins[i] = PWMOut(self._rgb_led_pins[i])
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
         self.color = self._current_color
