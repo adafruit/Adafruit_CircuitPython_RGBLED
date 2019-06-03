@@ -52,11 +52,7 @@ To install in a virtual environment in your current project:
     pip3 install adafruit-circuitpython-rgbled
 
 Usage Example
-=============
-
-This example demonstrates the library with the single built-in NeoPixel on the
-`Feather M0 Express <https://www.adafruit.com/product/3403>`_ and
-`Metro M0 Express <https://www.adafruit.com/product/3505>`_.
+==============
 
 Initialize a common-cathode RGB LED with three PWM-capable pins.
 
