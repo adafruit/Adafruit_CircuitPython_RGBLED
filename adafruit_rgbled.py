@@ -118,6 +118,7 @@ class RGBLED:
         """Turn the LEDs off, deinit pwmout and release hardware resources."""
         for pin in self._rgb_led_pins:
             pin.deinit() #pylint: no-member
+        self._current_color = (0, 0, 0)
 
     @property
     def color(self):
