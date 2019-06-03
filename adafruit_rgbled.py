@@ -56,6 +56,7 @@ class RGBLED:
     Example for setting a RGB LED using a RGB Tuple (Red, Green, Blue):
 
     .. code-block:: python
+
         import board
         import adafruit_rgbled
 
@@ -70,6 +71,7 @@ class RGBLED:
     Example for setting a RGB LED using a 24-bit integer (hex syntax):
 
     .. code-block:: python
+
         import board
         import adafruit_rgbled
 
@@ -84,6 +86,7 @@ class RGBLED:
     Example for setting a RGB LED using a ContextManager:
 
     .. code-block:: python
+
         import board
         import adafruit_rgbled
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7) as rgb_led:
@@ -92,6 +95,7 @@ class RGBLED:
     Example for setting a common-anode RGB LED using a ContextManager:
 
     .. code-block:: python
+
         import board
         import adafruit_rgbled
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
