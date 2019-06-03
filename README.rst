@@ -13,7 +13,8 @@ CircuitPython_RGBLED
     :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_RGBLED
     :alt: Build Status
 
-CircuitPython driver for RGB LEDs.
+CircuitPython driver for RGB LEDs. Works with native microcontroller pins,
+`Adafruit Blinka <https://github.com/adafruit/Adafruit_Blinka>`_, or the `PCA9685 PWM driver <https://www.adafruit.com/product/815>`_.
 
 Dependencies
 =============
