@@ -114,12 +114,10 @@ class RGBLED:
     def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
         for i in range(len(self._rgb_led_pins)):
-            pin_type = str(type(self._rgb_led_pins[i]))
-            if pin_type == "<class 'Pin'>":
-                self._rgb_led_pins[i] = PWMOut(self._rgb_led_pins[i])
+            if hasattr(self._rgb_led_pins[i], 'frequency'):
                 self._rgb_led_pins[i].duty_cycle = 0
-            elif pin_type == "<class 'PWMChannel'>" or pin_type == "<class 'PWMOut'>":
-                # PWMChannel/PWMOut do not require extra setup
+            elif str(type(self._rgb_led_pins[i])) == "<class 'Pin'>":
+                self._rgb_led_pins[i] = PWMOut(self._rgb_led_pins[i])
                 self._rgb_led_pins[i].duty_cycle = 0
             else:
                 raise TypeError('Must provide a pin, PWMOut, or PWMChannel.')
