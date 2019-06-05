@@ -59,7 +59,7 @@ class RGBLED:
     :type ~microcontroller.Pin: Microcontroller's blue_pin.
     :type pulseio.PWMOut: PWMOut object associated with blue_pin.
     :type PWMChannel: PCA9685 PWM channel associated with blue_pin.
-    :param ESP_SPIcontrol esp: The ESP object connected to a RGB LED.
+    :param ESP_SPIcontrol esp: The ESP object connected to a RGB LED. Defaults to None.
     :param bool invert_pwm: False if the RGB LED is common cathode,
         true if the RGB LED is common anode.
 
@@ -141,8 +141,7 @@ class RGBLED:
                 esp.set_pin_mode(self._rgb_led_pins[i], 1)
             else:
                 raise TypeError('Must provide a pin, PWMOut, ESP Object, or PWMChannel.')
-        if esp is not None:
-            self._esp = esp
+        self._esp = esp
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
         self.color = self._current_color
@@ -196,8 +195,8 @@ class RGBLED:
         :param int color: Color, from color method.
         :param int rgb_led_pin: GPIO pin to write to.
         """
-        if self._esp:
+        if self._esp is not None:
             color = map_range(abs(color), 0, 65535, 0, 1.0)
             self._esp.set_analog_write(rgb_led_pin, abs(color))
         else:
-            rgb_led_pin.duty_cycle(abs(color))
+            rgb_led_pin.duty_cycle = abs(color)
