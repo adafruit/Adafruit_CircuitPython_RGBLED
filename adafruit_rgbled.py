@@ -59,6 +59,7 @@ class RGBLED:
     :type ~microcontroller.Pin: Microcontroller's blue_pin.
     :type pulseio.PWMOut: PWMOut object associated with blue_pin.
     :type PWMChannel: PCA9685 PWM channel associated with blue_pin.
+    :param ESP_SPIcontrol esp: The ESP object connected to a RGB LED.
     :param bool invert_pwm: False if the RGB LED is common cathode,
         true if the RGB LED is common anode.
 
@@ -110,8 +111,25 @@ class RGBLED:
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
             rgb_led.color = (0, 255, 0)
 
+    Example for setting a RGB LED connected to an ESP32 module, using adafruit_esp32spi:
+
+    .. code-block:: python
+
+        import board
+        import adafruit_rgbled
+        from adafruit_esp32spi import adafruit_esp32spi
+        # Create ESP Object
+        esp32_cs = DigitalInOut(board.D13)
+        esp32_ready = DigitalInOut(board.D11)
+        esp32_reset = DigitalInOut(board.D12)
+        spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
+        esp = adafruit_esp32spi.ESP_SPIcontrol(spi, esp32_cs, esp32_ready, esp32_reset)
+        with adafruit_rgbled.RGBLED(25, 26, 27, esp) as rgb_led:
+            rgb_led.color = (0, 255, 0)
+
     """
-    def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
+    # pylint: disable=too-many-arguments
+    def __init__(self, red_pin, green_pin, blue_pin, esp=None, invert_pwm=False):
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
         for i in range(len(self._rgb_led_pins)):
             if hasattr(self._rgb_led_pins[i], 'frequency'):
@@ -119,8 +137,12 @@ class RGBLED:
             elif str(type(self._rgb_led_pins[i])) == "<class 'Pin'>":
                 self._rgb_led_pins[i] = PWMOut(self._rgb_led_pins[i])
                 self._rgb_led_pins[i].duty_cycle = 0
+            elif esp is not None:
+                esp.set_pin_mode(self._rgb_led_pins[i], 1)
             else:
-                raise TypeError('Must provide a pin, PWMOut, or PWMChannel.')
+                raise TypeError('Must provide a pin, PWMOut, ESP Object, or PWMChannel.')
+        if esp is not None:
+            self._esp = esp
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
         self.color = self._current_color
@@ -134,7 +156,7 @@ class RGBLED:
     def deinit(self):
         """Turn the LEDs off, deinit pwmout and release hardware resources."""
         for pin in self._rgb_led_pins:
-            pin.deinit() #pylint: no-member
+            pin.deinit()
         self._current_color = (0, 0, 0)
 
     @property
@@ -153,7 +175,7 @@ class RGBLED:
                 color = int(map_range(value[i], 0, 255, 0, 65535))
                 if self._invert_pwm:
                     color -= 65535
-                self._rgb_led_pins[i].duty_cycle = abs(color)
+                self._write_color(color, self._rgb_led_pins[i])
         elif isinstance(value, int):
             if value>>24:
                 raise ValueError("Only bits 0->23 valid for integer input")
@@ -165,6 +187,17 @@ class RGBLED:
                 rgb[color] = int(map_range(rgb[color], 0, 255, 0, 65535))
                 if self._invert_pwm:
                     rgb[color] -= 65535
-                self._rgb_led_pins[color].duty_cycle = abs(rgb[color])
+                self._write_color(color, self._rgb_led_pins[color])
         else:
             raise ValueError('Color must be a tuple or 24-bit integer value.')
+
+    def _write_color(self, color, rgb_led_pin):
+        """Sets duty-cycle for user-defined color to a RGB LED.
+        :param int color: Color, from color method.
+        :param int rgb_led_pin: GPIO pin to write to.
+        """
+        if self._esp:
+            color = map_range(abs(color), 0, 65535, 0, 1.0)
+            self._esp.set_analog_write(rgb_led_pin, abs(color))
+        else:
+            rgb_led_pin.duty_cycle(abs(color))
