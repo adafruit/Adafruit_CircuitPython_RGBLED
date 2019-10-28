@@ -1,6 +1,5 @@
 CircuitPython_RGBLED
 ====================
-
 .. image:: https://readthedocs.org/projects/adafruit-circuitpython-rgbled/badge/?version=latest
     :target: https://circuitpython.readthedocs.io/projects/rgbled/en/latest/
     :alt: Documentation Status
@@ -9,8 +8,8 @@ CircuitPython_RGBLED
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_RGBLED.svg?branch=master
-    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_RGBLED
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython/RGBLED/workflows/Build+CI/badge.svg
+    :target: https://github.com/adafruit/Adafruit_CircuitPython_RGBLED/actions
     :alt: Build Status
 
 CircuitPython driver for RGB LEDs. Works with native microcontroller pins,
