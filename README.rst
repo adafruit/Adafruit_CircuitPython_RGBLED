@@ -8,7 +8,7 @@ CircuitPython_RGBLED
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://github.com/adafruit/Adafruit_CircuitPython/RGBLED/workflows/Build+CI/badge.svg
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython_RGBLED/workflows/Build%20CI/badge.svg
     :target: https://github.com/adafruit/Adafruit_CircuitPython_RGBLED/actions
     :alt: Build Status
 
