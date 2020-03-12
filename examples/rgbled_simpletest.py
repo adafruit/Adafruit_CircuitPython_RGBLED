@@ -17,6 +17,7 @@ led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED)
 # Optionally, you can also create the RGB LED object with inverted PWM
 # led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED, invert_pwm=True)
 
+
 def wheel(pos):
     # Input a value 0 to 255 to get a color value.
     # The colours are a transition r - g - b - back to r.
@@ -30,11 +31,13 @@ def wheel(pos):
     pos -= 170
     return int(pos * 3), 0, int(255 - (pos * 3))
 
+
 def rainbow_cycle(wait):
     for i in range(255):
         i = (i + 1) % 256
         led.color = wheel(i)
         time.sleep(wait)
+
 
 while True:
     # setting RGB LED color to RGB Tuples (R, G, B)

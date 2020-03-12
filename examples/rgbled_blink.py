@@ -5,12 +5,12 @@ import board
 import adafruit_rgbled
 
 # Configure the setup
-RED_LED = board.D5      # Pin the Red LED is connected to
-GREEN_LED = board.D6    # Pin the Green LED is connected to
-BLUE_LED = board.D7     # Pin the Blue LED is connected to
+RED_LED = board.D5  # Pin the Red LED is connected to
+GREEN_LED = board.D6  # Pin the Green LED is connected to
+BLUE_LED = board.D7  # Pin the Blue LED is connected to
 COLOR = (100, 50, 150)  # color to blink
-CLEAR = (0, 0, 0)       # clear (or second color)
-DELAY = 0.25            # blink rate in seconds
+CLEAR = (0, 0, 0)  # clear (or second color)
+DELAY = 0.25  # blink rate in seconds
 
 # Create the RGB LED object
 led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED)
