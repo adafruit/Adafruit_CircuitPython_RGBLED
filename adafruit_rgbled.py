@@ -43,6 +43,7 @@ from simpleio import map_range
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_RGBLED.git"
 
+
 class RGBLED:
     """
     Creates a RGBLED object given three physical pins or PWMOut objects.
@@ -111,16 +112,17 @@ class RGBLED:
             rgb_led.color = (0, 255, 0)
 
     """
+
     def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
         for i in range(len(self._rgb_led_pins)):
-            if hasattr(self._rgb_led_pins[i], 'frequency'):
+            if hasattr(self._rgb_led_pins[i], "frequency"):
                 self._rgb_led_pins[i].duty_cycle = 0
             elif str(type(self._rgb_led_pins[i])) == "<class 'Pin'>":
                 self._rgb_led_pins[i] = PWMOut(self._rgb_led_pins[i])
                 self._rgb_led_pins[i].duty_cycle = 0
             else:
-                raise TypeError('Must provide a pin, PWMOut, or PWMChannel.')
+                raise TypeError("Must provide a pin, PWMOut, or PWMChannel.")
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
         self.color = self._current_color
@@ -134,7 +136,7 @@ class RGBLED:
     def deinit(self):
         """Turn the LEDs off, deinit pwmout and release hardware resources."""
         for pin in self._rgb_led_pins:
-            pin.deinit() #pylint: no-member
+            pin.deinit()  # pylint: no-member
         self._current_color = (0, 0, 0)
 
     @property
@@ -155,11 +157,11 @@ class RGBLED:
                     color -= 65535
                 self._rgb_led_pins[i].duty_cycle = abs(color)
         elif isinstance(value, int):
-            if value>>24:
+            if value >> 24:
                 raise ValueError("Only bits 0->23 valid for integer input")
             r = value >> 16
-            g = (value >> 8) & 0xff
-            b = value & 0xff
+            g = (value >> 8) & 0xFF
+            b = value & 0xFF
             rgb = [r, g, b]
             for color in range(0, 3):
                 rgb[color] = int(map_range(rgb[color], 0, 255, 0, 65535))
@@ -167,4 +169,4 @@ class RGBLED:
                     rgb[color] -= 65535
                 self._rgb_led_pins[color].duty_cycle = abs(rgb[color])
         else:
-            raise ValueError('Color must be a tuple or 24-bit integer value.')
+            raise ValueError("Color must be a tuple or 24-bit integer value.")

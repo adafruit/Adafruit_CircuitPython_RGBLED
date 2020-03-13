@@ -7,7 +7,7 @@ import adafruit_rgbled
 # PCA9685 Initialization
 i2c = busio.I2C(board.SCL, board.SDA)
 pca = adafruit_pca9685.PCA9685(i2c)
-pca.frequency=60
+pca.frequency = 60
 
 # PCA9685 LED Channels
 RED_LED = pca.channels[0]
@@ -19,6 +19,7 @@ led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED, invert_pwm=True)
 
 # Optionally, you can also create the RGB LED object with inverted PWM
 # led = adafruit_rgbled.RGBLED(RED_LED, GREEN_LED, BLUE_LED, invert_pwm=True)
+
 
 def wheel(pos):
     # Input a value 0 to 255 to get a color value.
@@ -33,23 +34,25 @@ def wheel(pos):
     pos -= 170
     return int(pos * 3), 0, int(255 - (pos * 3))
 
+
 def rainbow_cycle(wait):
     for i in range(255):
         i = (i + 1) % 256
         led.color = wheel(i)
         time.sleep(wait)
 
+
 while True:
     # setting RGB LED color to RGB Tuples (R, G, B)
-    print('setting color 1')
+    print("setting color 1")
     led.color = (255, 0, 0)
     time.sleep(1)
 
-    print('setting color 2')
+    print("setting color 2")
     led.color = (0, 255, 0)
     time.sleep(1)
 
-    print('setting color 3')
+    print("setting color 3")
     led.color = (0, 0, 255)
     time.sleep(1)
 
