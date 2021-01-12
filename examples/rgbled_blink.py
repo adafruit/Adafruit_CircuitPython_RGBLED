@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 # This example shows how to create a single RGB LED with a specific color channel
 # order and blink it.
 import time
