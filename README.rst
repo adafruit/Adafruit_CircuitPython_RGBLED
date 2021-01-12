@@ -72,7 +72,7 @@ Initialize a common-cathode RGB LED with three PWM-capable pins.
     # Create a RGB LED object
     led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
 
-Initialize a common-anode RGB LED with three PWM-capable pins 
+Initialize a common-anode RGB LED with three PWM-capable pins
 
 .. code-block:: python
 
@@ -100,7 +100,7 @@ Set the RGB LED's color to a RGB Tuple (Red, Green, Blue).
 Set the RGB LED's color to a 24-bit integer (in hex syntax), 0x100000.
 
 .. code-block:: python
-    
+
     led.color = 0x100000
 
 Setting a common-anode RGB LED using a ContextManager:
