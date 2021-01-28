@@ -20,7 +20,7 @@ Implementation Notes
 
 * Adafruit's SimpleIO library: https://github.com/adafruit/Adafruit_CircuitPython_SimpleIO
 """
-from pulseio import PWMOut
+from pwmio import PWMOut
 from simpleio import map_range
 
 __version__ = "0.0.0-auto.0"
@@ -33,15 +33,15 @@ class RGBLED:
 
     :param red_pin: The physical pin connected to a red LED anode.
     :type ~microcontroller.Pin: Microcontroller's red_pin.
-    :type pulseio.PWMOut: PWMOut object associated with red_pin.
+    :type pwmio.PWMOut: PWMOut object associated with red_pin.
     :type PWMChannel: PCA9685 PWM channel associated with red_pin.
     :param green_pin: The physical pin connected to a green LED anode.
     :type ~microcontroller.Pin: Microcontroller's green_pin.
-    :type pulseio.PWMOut: PWMOut object associated with green_pin.
+    :type pwmio.PWMOut: PWMOut object associated with green_pin.
     :type PWMChannel: PCA9685 PWM channel associated with green_pin.
     :param blue_pin: The physical pin connected to a blue LED anode.
     :type ~microcontroller.Pin: Microcontroller's blue_pin.
-    :type pulseio.PWMOut: PWMOut object associated with blue_pin.
+    :type pwmio.PWMOut: PWMOut object associated with blue_pin.
     :type PWMChannel: PCA9685 PWM channel associated with blue_pin.
     :param bool invert_pwm: False if the RGB LED is common cathode,
         true if the RGB LED is common anode.
