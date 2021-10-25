@@ -112,6 +112,11 @@ Setting a common-anode RGB LED using a ContextManager:
     with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm = True) as rgb_led:
         rgb_led.color = (0, 255, 0)
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/rgbled/en/latest/>`_.
+
 Contributing
 ============
 
