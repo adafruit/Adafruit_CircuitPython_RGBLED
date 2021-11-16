@@ -98,7 +98,9 @@ class RGBLED:
 
     def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
-        for i in range(len(self._rgb_led_pins)):
+        for i in range(  # pylint: disable=consider-using-enumerate
+            len(self._rgb_led_pins)
+        ):
             if hasattr(self._rgb_led_pins[i], "frequency"):
                 self._rgb_led_pins[i].duty_cycle = 0
             elif str(type(self._rgb_led_pins[i])) == "<class 'Pin'>":
