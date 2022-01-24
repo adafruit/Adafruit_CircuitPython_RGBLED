@@ -1,7 +1,7 @@
 CircuitPython_RGBLED
 ====================
 .. image:: https://readthedocs.org/projects/adafruit-circuitpython-rgbled/badge/?version=latest
-    :target: https://circuitpython.readthedocs.io/projects/rgbled/en/latest/
+    :target: https://docs.circuitpython.org/projects/rgbled/en/latest/
     :alt: Documentation Status
 
 .. image:: https://img.shields.io/discord/327254708534116352.svg
@@ -115,7 +115,7 @@ Setting a common-anode RGB LED using a ContextManager:
 Documentation
 =============
 
-API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/rgbled/en/latest/>`_.
+API documentation for this library can be found on `Read the Docs <https://docs.circuitpython.org/projects/rgbled/en/latest/>`_.
 
 Contributing
 ============
