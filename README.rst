@@ -1,6 +1,6 @@
 CircuitPython_RGBLED
 ====================
-.. image:: https://readthedocs.org/projects/adafruit-circuitpython-rgbled/badge/?version=latest
+.. image:: https://readthedocs.org/projects/rgbled/badge/?version=latest
     :target: https://docs.circuitpython.org/projects/rgbled/en/latest/
     :alt: Documentation Status
 
