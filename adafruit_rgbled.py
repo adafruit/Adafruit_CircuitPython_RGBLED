@@ -17,11 +17,8 @@ Implementation Notes
 
 * Adafruit CircuitPython firmware for the supported boards:
   https://github.com/adafruit/circuitpython/releases
-
-* Adafruit's SimpleIO library: https://github.com/adafruit/Adafruit_CircuitPython_SimpleIO
 """
 from pwmio import PWMOut
-from simpleio import map_range
 
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_RGBLED.git"
@@ -137,19 +134,19 @@ class RGBLED:
         self._current_color = value
         if isinstance(value, tuple):
             for i in range(0, 3):
-                color = int(map_range(value[i], 0, 255, 0, 65535))
+                color = int(max(0, min(65535, value[i] * 257)))
                 if self._invert_pwm:
                     color -= 65535
                 self._rgb_led_pins[i].duty_cycle = abs(color)
         elif isinstance(value, int):
-            if value >> 24:
+            if value > 0xFFFFFF:
                 raise ValueError("Only bits 0->23 valid for integer input")
             r = value >> 16
             g = (value >> 8) & 0xFF
             b = value & 0xFF
             rgb = [r, g, b]
             for color in range(0, 3):
-                rgb[color] = int(map_range(rgb[color], 0, 255, 0, 65535))
+                rgb[color] = max(0, min(65535, rgb[color] * 257))
                 if self._invert_pwm:
                     rgb[color] -= 65535
                 self._rgb_led_pins[color].duty_cycle = abs(rgb[color])
