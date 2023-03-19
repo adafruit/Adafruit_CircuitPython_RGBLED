@@ -24,7 +24,6 @@ Dependencies
 This driver depends on:
 
 * `Adafruit CircuitPython <https://github.com/adafruit/circuitpython>`_
-* `SimpleIO Library <https://github.com/adafruit/Adafruit_CircuitPython_SimpleIO>`_
 
 Please ensure all dependencies are available on the CircuitPython filesystem.
 This is easily achieved by downloading
