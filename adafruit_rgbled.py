@@ -143,24 +143,29 @@ class RGBLED:
 
     @color.setter
     def color(self, value: Union[int, tuple]):
-        self._current_color = value
-        if isinstance(value, tuple):
-            for i in range(0, 3):
-                color = int(max(0, min(65535, value[i] * 257)))
-                if self._invert_pwm:
-                    color -= 65535
-                self._rgb_led_pins[i].duty_cycle = abs(color)
-        elif isinstance(value, int):
-            if value > 0xFFFFFF:
-                raise ValueError("Only bits 0->23 valid for integer input")
-            r = value >> 16
-            g = (value >> 8) & 0xFF
-            b = value & 0xFF
-            rgb = [r, g, b]
-            for color in range(0, 3):
-                rgb[color] = max(0, min(65535, rgb[color] * 257))
-                if self._invert_pwm:
-                    rgb[color] -= 65535
-                self._rgb_led_pins[color].duty_cycle = abs(rgb[color])
+        old_color = self._current_color
+        if isinstance(value, int):
+            try:
+                rgb = value.to_bytes(3, "big", signed=False)
+            except OverflowError as exc:
+                raise ValueError("Only bits 0->23 valid for integer input") from exc
+        elif isinstance(value, tuple):
+            try:
+                rgb = bytes(value)
+            except (ValueError, TypeError) as exc:
+                raise ValueError(
+                    "Only a tuple of 3 integers of 0 - 255 for tuple input."
+                ) from exc
         else:
-            raise TypeError("Color must be a tuple or 24-bit integer value.")
+            raise TypeError(
+                "Color must be a tuple of 3 integers or 24-bit integer value."
+            )
+        try:
+            for color, intensity in enumerate(rgb):
+                self._rgb_led_pins[color].duty_cycle = abs(
+                    intensity * 257 - 65535 * self._invert_pwm
+                )
+        except IndexError as exc:
+            self.color = old_color
+            raise ValueError("Tuple must be 3 integers.") from exc
+        self._current_color = value
