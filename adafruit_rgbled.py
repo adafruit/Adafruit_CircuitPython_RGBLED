@@ -136,7 +136,8 @@ class RGBLED:
         :param Union[int, tuple] value: RGB LED desired value - can be a RGB tuple of values
         0 - 255 or a 24-bit integer. e.g. (255, 64, 35) and 0xff4023 are equivalent.
 
-        :raises ValueError: If the input is an int > 0xffffff.
+        :raises ValueError: If the input is an int > 0xffffff or is not a tuple of 3 integers
+            0 - 255.
         :raises TypeError: If the input is not an integer or a tuple.
         """
         return self._current_color
@@ -167,5 +168,5 @@ class RGBLED:
                 )
         except IndexError as exc:
             self.color = old_color
-            raise ValueError("Tuple must be 3 integers.") from exc
+            raise ValueError("Tuple must contain 3 integers.") from exc
         self._current_color = value
