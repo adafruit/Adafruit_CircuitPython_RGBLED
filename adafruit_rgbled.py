@@ -144,7 +144,6 @@ class RGBLED:
 
     @color.setter
     def color(self, value: Union[int, tuple]):
-        old_color = self._current_color
         if isinstance(value, int):
             try:
                 rgb = value.to_bytes(3, "big", signed=False)
@@ -153,6 +152,8 @@ class RGBLED:
         elif isinstance(value, tuple):
             try:
                 rgb = bytes(value)
+                if len(rgb) != 3:
+                    raise ValueError
             except (ValueError, TypeError) as exc:
                 raise ValueError(
                     "Only a tuple of 3 integers of 0 - 255 for tuple input."
@@ -161,12 +162,8 @@ class RGBLED:
             raise TypeError(
                 "Color must be a tuple of 3 integers or 24-bit integer value."
             )
-        try:
-            for color, intensity in enumerate(rgb):
-                self._rgb_led_pins[color].duty_cycle = abs(
-                    intensity * 257 - 65535 * self._invert_pwm
-                )
-        except IndexError as exc:
-            self.color = old_color
-            raise ValueError("Tuple must contain 3 integers.") from exc
+        for color, intensity in enumerate(rgb):
+            self._rgb_led_pins[color].duty_cycle = abs(
+                intensity * 257 - 65535 * self._invert_pwm
+            )
         self._current_color = value
