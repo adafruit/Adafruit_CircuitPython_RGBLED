@@ -86,7 +86,6 @@ class RGBLED:
         import adafruit_rgbled
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
             rgb_led.color = (0, 255, 0)
-
     """
 
     def __init__(
@@ -135,21 +134,18 @@ class RGBLED:
 
     @property
     def color(self) -> Union[int, tuple]:
-        """Return the RGB LED's current color.
-
-        :return Union[int, tuple]: The currently set color.
         """
-        return self._current_color
-
-    @color.setter
-    def color(self, value: Union[int, tuple]):
-        """Sets the RGB LED to a desired color.
+        Sets the RGB LED to a desired color.
         :param Union[int, tuple] value: RGB LED desired value - can be a RGB tuple of values
         0 - 255 or a 24-bit integer. e.g. (255, 64, 35) and 0xff4023 are equivalent.
 
         :raises ValueError: If the input is an int > 0xffffff.
         :raises TypeError: If the input is not an integer or a tuple.
         """
+        return self._current_color
+
+    @color.setter
+    def color(self, value: Union[int, tuple]):
         self._current_color = value
         if isinstance(value, tuple):
             for i in range(0, 3):
