@@ -20,9 +20,6 @@ Implementation Notes
 """
 try:
     from typing import Union
-    import adafruit_pca9685 as pca9685
-    import pwmio
-    import microcontroller
 except ImportError:
     pass
 
@@ -87,20 +84,20 @@ class RGBLED:
 
     def __init__(
         self,
-        red_pin: Union[microcontroller.Pin, pwmio.PWMOut, pca9685.PWMChannel],
-        green_pin: Union[microcontroller.Pin, pwmio.PWMOut, pca9685.PWMChannel],
-        blue_pin: Union[microcontroller.Pin, pwmio.PWMOut, pca9685.PWMChannel],
+        red_pin: Union["microcontroller.Pin", PWMOut, "PWMChannel"],
+        green_pin: Union["microcontroller.Pin", PWMOut, "PWMChannel"],
+        blue_pin: Union["microcontroller.Pin", PWMOut, "PWMChannel"],
         invert_pwm: bool = False,
     ) -> None:
         """
-        :param Union[microcontroller.Pin, pwmio.PWMOut, pca9685.PWMChannel] red_pin:
+        :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] red_pin:
         The connection to the red LED.
-        :param Union[microcontroller.Pin, pwmio.PWMOut, pca9685.PWMChannel] green_pin:
+        :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] green_pin:
         The connection to the green LED.
-        :param Union[microcontroller.Pin, pwmio.PWMOut, pca9685.PWMChannel] blue_pin:
+        :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] blue_pin:
         The connection to the blue LED.
         :param bool invert_pwm: False if the RGB LED is common cathode,
-        True if the RGB LED is common anode.
+        True if the RGB LED is common anode. Defaults to False.
         """
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
         for i in range(  # pylint: disable=consider-using-enumerate
