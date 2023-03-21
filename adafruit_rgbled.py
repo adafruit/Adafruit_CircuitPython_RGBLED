@@ -143,12 +143,13 @@ class RGBLED:
     def color(self, value: Union[int, tuple]):
         if isinstance(value, int):
             try:
+                # Check that integer is <= 0xffffff and create an iterable.
                 rgb = value.to_bytes(3, "big", signed=False)
             except OverflowError as exc:
                 raise ValueError("Only bits 0->23 valid for integer input") from exc
         elif isinstance(value, tuple):
             try:
-                rgb = bytes(value)
+                rgb = bytes(value)  # Check that tuple has 3 integers of 0 - 255.
                 if len(rgb) != 3:
                     raise ValueError
             except (ValueError, TypeError) as exc:
@@ -160,6 +161,7 @@ class RGBLED:
                 "Color must be a tuple of 3 integers or 24-bit integer value."
             )
         for color, intensity in enumerate(rgb):
+            # Take advantage of bool truthiness.
             self._rgb_led_pins[color].duty_cycle = abs(
                 intensity * 257 - 65535 * self._invert_pwm
             )
