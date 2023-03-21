@@ -100,16 +100,15 @@ class RGBLED:
         True if the RGB LED is common anode. Defaults to False.
         """
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
-        for i in range(  # pylint: disable=consider-using-enumerate
-            len(self._rgb_led_pins)
-        ):
-            if hasattr(self._rgb_led_pins[i], "frequency"):
-                self._rgb_led_pins[i].duty_cycle = 0
-            elif str(type(self._rgb_led_pins[i])) == "<class 'Pin'>":
-                self._rgb_led_pins[i] = PWMOut(self._rgb_led_pins[i])
-                self._rgb_led_pins[i].duty_cycle = 0
-            else:
-                raise TypeError("Must provide a pin, PWMOut, or PWMChannel.")
+        for pin in self._rgb_led_pins:
+            try:
+                if str(type(pin)) == "<class 'Pin'>":
+                    pin = PWMOut(pin)
+                pin.duty_cycle = 0
+            except AttributeError as exc:
+                raise TypeError(
+                    "Pins must be of type Pin, PWMOut or PWMChannel"
+                ) from exc
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
         self.color = self._current_color
@@ -149,7 +148,7 @@ class RGBLED:
                 raise ValueError("Only bits 0->23 valid for integer input") from exc
         elif isinstance(value, tuple):
             try:
-                rgb = bytes(value)  # Check that tuple has 3 integers of 0 - 255.
+                rgb = bytes(value)  # Check that tuple has integers of 0 - 255.
                 if len(rgb) != 3:
                     raise ValueError
             except (ValueError, TypeError) as exc:
