@@ -100,18 +100,18 @@ class RGBLED:
         True if the RGB LED is common anode. Defaults to False.
         """
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
-        for pin in self._rgb_led_pins:
+        for pin, _ in enumerate(self._rgb_led_pins):
             try:
-                if str(type(pin)) == "<class 'Pin'>":
-                    pin = PWMOut(pin)
-                pin.duty_cycle = 0
+                pin_type = str(type(self._rgb_led_pins[pin]))
+                if pin_type.startswith("<class '") and pin_type.endswith("Pin'>"):
+                    self._rgb_led_pins[pin] = PWMOut(self._rgb_led_pins[pin])
+                self._rgb_led_pins[pin].duty_cycle = 0
             except AttributeError as exc:
                 raise TypeError(
                     "Pins must be of type Pin, PWMOut or PWMChannel"
                 ) from exc
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
-        self.color = self._current_color
 
     def __enter__(self) -> "RGBLED":
         return self
