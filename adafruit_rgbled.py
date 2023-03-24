@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
+# pylint: disable=raise-missing-from
 """
 `adafruit_rgbled`
 ================================================================================
@@ -106,12 +107,11 @@ class RGBLED:
                 if pin_type.startswith("<class '") and pin_type.endswith("Pin'>"):
                     self._rgb_led_pins[pin] = PWMOut(self._rgb_led_pins[pin])
                 self._rgb_led_pins[pin].duty_cycle = 0
-            except AttributeError as exc:
-                raise TypeError(
-                    "Pins must be of type Pin, PWMOut or PWMChannel"
-                ) from exc
+            except AttributeError:
+                raise TypeError("Pins must be of type Pin, PWMOut or PWMChannel")
         self._invert_pwm = invert_pwm
         self._current_color = (0, 0, 0)
+        self.color = self._current_color
 
     def __enter__(self) -> "RGBLED":
         return self
@@ -144,17 +144,17 @@ class RGBLED:
             try:
                 # Check that integer is <= 0xffffff and create an iterable.
                 rgb = value.to_bytes(3, "big", signed=False)
-            except OverflowError as exc:
-                raise ValueError("Only bits 0->23 valid for integer input") from exc
+            except OverflowError:
+                raise ValueError("Only bits 0->23 valid for integer input")
         elif isinstance(value, tuple):
             try:
                 rgb = bytes(value)  # Check that tuple has integers of 0 - 255.
                 if len(rgb) != 3:
                     raise ValueError
-            except (ValueError, TypeError) as exc:
+            except (ValueError, TypeError):
                 raise ValueError(
                     "Only a tuple of 3 integers of 0 - 255 for tuple input."
-                ) from exc
+                )
         else:
             raise TypeError(
                 "Color must be a tuple of 3 integers or 24-bit integer value."
