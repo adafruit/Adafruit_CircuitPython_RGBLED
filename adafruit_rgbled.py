@@ -19,7 +19,9 @@ Implementation Notes
   https://github.com/adafruit/circuitpython/releases
 """
 try:
-    from typing import Union
+    from typing import Union, Optional, Type, TracebackType
+    from circuitpython_typing.led import ColorBasedColorUnion
+    from microcontroller import Pin
 except ImportError:
     pass
 
@@ -31,9 +33,9 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_RGBLED.git"
 
 class RGBLED:
     """
-    Creates a RGBLED object given three physical pins or PWMOut objects.
+    Creates an RGBLED object given three physical pins or PWMOut objects.
 
-    Example for setting a RGB LED using a RGB Tuple (Red, Green, Blue):
+    Example for setting an RGB LED using an RGB Tuple (Red, Green, Blue):
 
     .. code-block:: python
 
@@ -48,7 +50,7 @@ class RGBLED:
         led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
         led.color = (255, 0, 0)
 
-    Example for setting a RGB LED using a 24-bit integer (hex syntax):
+    Example for setting an RGB LED using a 24-bit integer (hex syntax):
 
     .. code-block:: python
 
@@ -59,11 +61,11 @@ class RGBLED:
         GREEN_LED = board.D6
         BLUE_LED = board.D7
 
-        # Create a RGB LED object
+        # Create an RGB LED object
         led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
         led.color = 0x100000
 
-    Example for setting a RGB LED using a ContextManager:
+    Example for setting an RGB LED using a ContextManager:
 
     .. code-block:: python
 
@@ -81,11 +83,11 @@ class RGBLED:
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
             rgb_led.color = (0, 255, 0)
 
-    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] red_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] red_pin:
         The connection to the red LED.
-    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] green_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] green_pin:
         The connection to the green LED.
-    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] blue_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] blue_pin:
         The connection to the blue LED.
     :param bool invert_pwm: False if the RGB LED is common cathode,
         True if the RGB LED is common anode. Defaults to False.
@@ -93,9 +95,9 @@ class RGBLED:
 
     def __init__(
         self,
-        red_pin: Union["microcontroller.Pin", PWMOut, "PWMChannel"],
-        green_pin: Union["microcontroller.Pin", PWMOut, "PWMChannel"],
-        blue_pin: Union["microcontroller.Pin", PWMOut, "PWMChannel"],
+        red_pin: Union[Pin, PWMOut, "PWMChannel"],
+        green_pin: Union[Pin, PWMOut, "PWMChannel"],
+        blue_pin: Union[Pin, PWMOut, "PWMChannel"],
         invert_pwm: bool = False,
     ) -> None:
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
@@ -116,7 +118,12 @@ class RGBLED:
     def __enter__(self) -> "RGBLED":
         return self
 
-    def __exit__(self, exception_type, exception_value, traceback) -> None:
+    def __exit__(
+        self,
+        exception_type: Optional[Type[type]],
+        exception_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
         self.deinit()
 
     def deinit(self) -> None:
@@ -126,11 +133,14 @@ class RGBLED:
         self._current_color = (0, 0, 0)
 
     @property
-    def color(self) -> Union[int, tuple]:
+    def color(self) -> ColorBasedColorUnion:
         """
         Sets the RGB LED to a desired color.
-        :param Union[int, tuple] value: RGB LED desired value - can be a RGB tuple of values
-        0 - 255 or a 24-bit integer. e.g. (255, 64, 35) and 0xff4023 are equivalent.
+        :param ColorBasedColorUnion value: RGB LED desired value - can be a RGB
+            tuple of values 0 - 255 or a 24-bit integer. e.g. (255, 64, 35) and 0xff4023
+            are equivalent.
+
+        :returns Union[int, Tuple[int, int, int]]: The current LED color setting.
 
         :raises ValueError: If the input is an int > 0xffffff.
         :raises TypeError: If the input is not an integer or a tuple.
@@ -138,7 +148,7 @@ class RGBLED:
         return self._current_color
 
     @color.setter
-    def color(self, value: Union[int, tuple]):
+    def color(self, value: ColorBasedColorUnion):
         self._current_color = value
         if isinstance(value, tuple):
             for i in range(0, 3):
