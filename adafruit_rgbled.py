@@ -80,6 +80,15 @@ class RGBLED:
         import adafruit_rgbled
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
             rgb_led.color = (0, 255, 0)
+
+    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] red_pin:
+        The connection to the red LED.
+    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] green_pin:
+        The connection to the green LED.
+    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] blue_pin:
+        The connection to the blue LED.
+    :param bool invert_pwm: False if the RGB LED is common cathode,
+        True if the RGB LED is common anode. Defaults to False.
     """
 
     def __init__(
@@ -89,16 +98,6 @@ class RGBLED:
         blue_pin: Union["microcontroller.Pin", PWMOut, "PWMChannel"],
         invert_pwm: bool = False,
     ) -> None:
-        """
-        :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] red_pin:
-        The connection to the red LED.
-        :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] green_pin:
-        The connection to the green LED.
-        :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] blue_pin:
-        The connection to the blue LED.
-        :param bool invert_pwm: False if the RGB LED is common cathode,
-        True if the RGB LED is common anode. Defaults to False.
-        """
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
         for i in range(  # pylint: disable=consider-using-enumerate
             len(self._rgb_led_pins)
