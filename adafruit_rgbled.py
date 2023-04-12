@@ -33,7 +33,7 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_RGBLED.git"
 
 class RGBLED:
     """
-    Creates an RGBLED object given three physical pins or PWMOut objects.
+    Create an RGBLED object given three physical pins or PWMOut objects.
 
     Example for setting an RGB LED using an RGB Tuple (Red, Green, Blue):
 
@@ -83,11 +83,11 @@ class RGBLED:
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
             rgb_led.color = (0, 255, 0)
 
-    :param Union[Pin, PWMOut, "PWMChannel"] red_pin:
+    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] red_pin:
         The connection to the red LED.
-    :param Union[Pin, PWMOut, "PWMChannel"] green_pin:
+    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] green_pin:
         The connection to the green LED.
-    :param Union[Pin, PWMOut, "PWMChannel"] blue_pin:
+    :param Union["microcontroller.Pin", PWMOut, "PWMChannel"] blue_pin:
         The connection to the blue LED.
     :param bool invert_pwm: False if the RGB LED is common cathode,
         True if the RGB LED is common anode. Defaults to False.
@@ -136,6 +136,7 @@ class RGBLED:
     def color(self) -> ColorBasedColorUnion:
         """
         Sets the RGB LED to a desired color.
+
         :param ColorBasedColorUnion value: RGB LED desired value - can be a RGB
             tuple of values 0 - 255 or a 24-bit integer. e.g. (255, 64, 35) and 0xff4023
             are equivalent.
