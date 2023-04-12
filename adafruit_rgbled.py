@@ -19,7 +19,8 @@ Implementation Notes
   https://github.com/adafruit/circuitpython/releases
 """
 try:
-    from typing import Union, Optional, Type, TracebackType
+    from typing import Union, Optional, Type
+    from types import TracebackType
     from circuitpython_typing.led import ColorBasedColorUnion
 except ImportError:
     pass
