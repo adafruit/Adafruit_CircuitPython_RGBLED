@@ -21,7 +21,7 @@ Implementation Notes
 try:
     from typing import Union, Optional, Type, TracebackType
     from circuitpython_typing.led import ColorBasedColorUnion
-    from microcontroller import Pin
+    import microcontroller
 except ImportError:
     pass
 
@@ -95,9 +95,9 @@ class RGBLED:
 
     def __init__(
         self,
-        red_pin: Union[Pin, PWMOut, "PWMChannel"],
-        green_pin: Union[Pin, PWMOut, "PWMChannel"],
-        blue_pin: Union[Pin, PWMOut, "PWMChannel"],
+        red_pin: Union[microcontroller.Pin, PWMOut, "PWMChannel"],
+        green_pin: Union[microcontroller.Pin, PWMOut, "PWMChannel"],
+        blue_pin: Union[microcontroller.Pin, PWMOut, "PWMChannel"],
         invert_pwm: bool = False,
     ) -> None:
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
