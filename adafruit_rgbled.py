@@ -22,7 +22,6 @@ try:
     from typing import Union, Optional, Type
     from types import TracebackType
     from microcontroller import Pin
-    from adafruit_pca9685 import PWMChannel
     from circuitpython_typing.led import ColorBasedColorUnion
 except ImportError:
     pass
@@ -85,11 +84,11 @@ class RGBLED:
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
             rgb_led.color = (0, 255, 0)
 
-    :param Union[Pin, PWMOut, PWMChannel] red_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] red_pin:
         The connection to the red LED.
-    :param Union[Pin, PWMOut, PWMChannel] green_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] green_pin:
         The connection to the green LED.
-    :param Union[Pin, PWMOut, PWMChannel] blue_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] blue_pin:
         The connection to the blue LED.
     :param bool invert_pwm: False if the RGB LED is common cathode,
         True if the RGB LED is common anode. Defaults to False.
@@ -97,9 +96,9 @@ class RGBLED:
 
     def __init__(
         self,
-        red_pin: Union[Pin, PWMOut, PWMChannel],
-        green_pin: Union[Pin, PWMOut, PWMChannel],
-        blue_pin: Union[Pin, PWMOut, PWMChannel],
+        red_pin: Union[Pin, PWMOut, "PWMChannel"],
+        green_pin: Union[Pin, PWMOut, "PWMChannel"],
+        blue_pin: Union[Pin, PWMOut, "PWMChannel"],
         invert_pwm: bool = False,
     ) -> None:
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
