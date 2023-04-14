@@ -85,11 +85,11 @@ class RGBLED:
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
             rgb_led.color = (0, 255, 0)
 
-    :param Union[Pin, PWMOut, PWMChannel] red_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] red_pin:
         The connection to the red LED.
-    :param Union[Pin, PWMOut, PWMChannel] green_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] green_pin:
         The connection to the green LED.
-    :param Union[Pin, PWMOut, PWMChannel] blue_pin:
+    :param Union[Pin, PWMOut, "PWMChannel"] blue_pin:
         The connection to the blue LED.
     :param bool invert_pwm: False if the RGB LED is common cathode,
         True if the RGB LED is common anode. Defaults to False.
