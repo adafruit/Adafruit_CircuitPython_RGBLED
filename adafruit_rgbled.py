@@ -18,6 +18,15 @@ Implementation Notes
 * Adafruit CircuitPython firmware for the supported boards:
   https://github.com/adafruit/circuitpython/releases
 """
+try:
+    from typing import Union, Optional, Type
+    from types import TracebackType
+    from microcontroller import Pin
+    from adafruit_pca9685 import PWMChannel
+    from circuitpython_typing.led import ColorBasedColorUnion
+except ImportError:
+    pass
+
 from pwmio import PWMOut
 
 __version__ = "0.0.0+auto.0"
@@ -26,24 +35,9 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_RGBLED.git"
 
 class RGBLED:
     """
-    Creates a RGBLED object given three physical pins or PWMOut objects.
+    Create an RGBLED object given three physical pins or PWMOut objects.
 
-    :param red_pin: The physical pin connected to a red LED anode.
-    :type ~microcontroller.Pin: Microcontroller's red_pin.
-    :type pwmio.PWMOut: PWMOut object associated with red_pin.
-    :type PWMChannel: PCA9685 PWM channel associated with red_pin.
-    :param green_pin: The physical pin connected to a green LED anode.
-    :type ~microcontroller.Pin: Microcontroller's green_pin.
-    :type pwmio.PWMOut: PWMOut object associated with green_pin.
-    :type PWMChannel: PCA9685 PWM channel associated with green_pin.
-    :param blue_pin: The physical pin connected to a blue LED anode.
-    :type ~microcontroller.Pin: Microcontroller's blue_pin.
-    :type pwmio.PWMOut: PWMOut object associated with blue_pin.
-    :type PWMChannel: PCA9685 PWM channel associated with blue_pin.
-    :param bool invert_pwm: False if the RGB LED is common cathode,
-        true if the RGB LED is common anode.
-
-    Example for setting a RGB LED using a RGB Tuple (Red, Green, Blue):
+    Example for setting an RGB LED using an RGB Tuple (Red, Green, Blue):
 
     .. code-block:: python
 
@@ -58,7 +52,7 @@ class RGBLED:
         led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
         led.color = (255, 0, 0)
 
-    Example for setting a RGB LED using a 24-bit integer (hex syntax):
+    Example for setting an RGB LED using a 24-bit integer (hex syntax):
 
     .. code-block:: python
 
@@ -69,11 +63,11 @@ class RGBLED:
         GREEN_LED = board.D6
         BLUE_LED = board.D7
 
-        # Create a RGB LED object
+        # Create an RGB LED object
         led = adafruit_rgbled.RGBLED(RED_LED, BLUE_LED, GREEN_LED)
         led.color = 0x100000
 
-    Example for setting a RGB LED using a ContextManager:
+    Example for setting an RGB LED using a ContextManager:
 
     .. code-block:: python
 
@@ -91,9 +85,23 @@ class RGBLED:
         with adafruit_rgbled.RGBLED(board.D5, board.D6, board.D7, invert_pwm=True) as rgb_led:
             rgb_led.color = (0, 255, 0)
 
+    :param Union[Pin, PWMOut, "PWMChannel"] red_pin:
+        The connection to the red LED.
+    :param Union[Pin, PWMOut, "PWMChannel"] green_pin:
+        The connection to the green LED.
+    :param Union[Pin, PWMOut, "PWMChannel"] blue_pin:
+        The connection to the blue LED.
+    :param bool invert_pwm: False if the RGB LED is common cathode,
+        True if the RGB LED is common anode. Defaults to False.
     """
 
-    def __init__(self, red_pin, green_pin, blue_pin, invert_pwm=False):
+    def __init__(
+        self,
+        red_pin: Union[Pin, PWMOut, PWMChannel],
+        green_pin: Union[Pin, PWMOut, PWMChannel],
+        blue_pin: Union[Pin, PWMOut, PWMChannel],
+        invert_pwm: bool = False,
+    ) -> None:
         self._rgb_led_pins = [red_pin, green_pin, blue_pin]
         for i in range(  # pylint: disable=consider-using-enumerate
             len(self._rgb_led_pins)
@@ -109,28 +117,41 @@ class RGBLED:
         self._current_color = (0, 0, 0)
         self.color = self._current_color
 
-    def __enter__(self):
+    def __enter__(self) -> "RGBLED":
         return self
 
-    def __exit__(self, exception_type, exception_value, traceback):
+    def __exit__(
+        self,
+        exception_type: Optional[Type[type]],
+        exception_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
         self.deinit()
 
-    def deinit(self):
+    def deinit(self) -> None:
         """Turn the LEDs off, deinit pwmout and release hardware resources."""
         for pin in self._rgb_led_pins:
             pin.deinit()  # pylint: disable=no-member
         self._current_color = (0, 0, 0)
 
     @property
-    def color(self):
-        """Returns the RGB LED's current color."""
+    def color(self) -> ColorBasedColorUnion:
+        """
+        Sets the RGB LED to a desired color.
+
+        :param ColorBasedColorUnion value: RGB LED desired value - can be a RGB
+            tuple of values 0 - 255 or a 24-bit integer. e.g. (255, 64, 35) and 0xff4023
+            are equivalent.
+
+        :returns Union[int, Tuple[int, int, int]]: The current LED color setting.
+
+        :raises ValueError: If the input is an int > 0xffffff.
+        :raises TypeError: If the input is not an integer or a tuple.
+        """
         return self._current_color
 
     @color.setter
-    def color(self, value):
-        """Sets the RGB LED to a desired color.
-        :param type value: RGB LED desired value - can be a RGB tuple or a 24-bit integer.
-        """
+    def color(self, value: ColorBasedColorUnion):
         self._current_color = value
         if isinstance(value, tuple):
             for i in range(0, 3):
@@ -151,4 +172,4 @@ class RGBLED:
                     rgb[color] -= 65535
                 self._rgb_led_pins[color].duty_cycle = abs(rgb[color])
         else:
-            raise ValueError("Color must be a tuple or 24-bit integer value.")
+            raise TypeError("Color must be a tuple or 24-bit integer value.")
