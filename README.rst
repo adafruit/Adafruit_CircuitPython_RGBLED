@@ -12,9 +12,9 @@ CircuitPython_RGBLED
     :target: https://github.com/adafruit/Adafruit_CircuitPython_RGBLED/actions
     :alt: Build Status
 
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
-    :alt: Code Style: Black
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+    :target: https://github.com/astral-sh/ruff
+    :alt: Code Style: Ruff
 
 CircuitPython driver for RGB LEDs. Works with native microcontroller pins,
 `Adafruit Blinka <https://github.com/adafruit/Adafruit_Blinka>`_, or the `PCA9685 PWM driver <https://www.adafruit.com/product/815>`_.

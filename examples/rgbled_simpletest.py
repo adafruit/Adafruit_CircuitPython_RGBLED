@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
 from rainbowio import colorwheel
+
 import adafruit_rgbled
 
 # Pin the Red LED is connected to

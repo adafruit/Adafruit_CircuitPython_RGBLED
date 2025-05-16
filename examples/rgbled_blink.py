@@ -4,7 +4,9 @@
 # This example shows how to create a single RGB LED with a specific color channel
 # order and blink it.
 import time
+
 import board
+
 import adafruit_rgbled
 
 # Configure the setup

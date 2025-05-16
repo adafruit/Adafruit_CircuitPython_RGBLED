@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: MIT
 
-# pylint: disable=raise-missing-from
 """
 `adafruit_rgbled`
 ================================================================================
@@ -19,12 +18,14 @@ Implementation Notes
 * Adafruit CircuitPython firmware for the supported boards:
   https://github.com/adafruit/circuitpython/releases
 """
+
 try:
-    from typing import Union, Optional, Type
     from types import TracebackType
-    from microcontroller import Pin
+    from typing import Optional, Type, Union
+
     from adafruit_pca9685 import PWMChannel
     from circuitpython_typing.led import ColorBasedColorUnion
+    from microcontroller import Pin
 except ImportError:
     pass
 
@@ -130,7 +131,7 @@ class RGBLED:
     def deinit(self) -> None:
         """Turn the LEDs off, deinit pwmout and release hardware resources."""
         for pin in self._rgb_led_pins:
-            pin.deinit()  # pylint: disable=no-member
+            pin.deinit()
         self._current_color = (0, 0, 0)
 
     @property
@@ -164,16 +165,10 @@ class RGBLED:
                 if len(rgb) != 3:
                     raise ValueError
             except (ValueError, TypeError):
-                raise ValueError(
-                    "Only a tuple of 3 integers of 0 - 255 for tuple input."
-                )
+                raise ValueError("Only a tuple of 3 integers of 0 - 255 for tuple input.")
         else:
-            raise TypeError(
-                "Color must be a tuple of 3 integers or 24-bit integer value."
-            )
+            raise TypeError("Color must be a tuple of 3 integers or 24-bit integer value.")
         for color, intensity in enumerate(rgb):
             # Take advantage of bool truthiness.
-            self._rgb_led_pins[color].duty_cycle = abs(
-                intensity * 257 - 65535 * self._invert_pwm
-            )
+            self._rgb_led_pins[color].duty_cycle = abs(intensity * 257 - 65535 * self._invert_pwm)
         self._current_color = value
