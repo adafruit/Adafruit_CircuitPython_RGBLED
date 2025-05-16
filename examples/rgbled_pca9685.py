@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
+import adafruit_pca9685
 import board
 import busio
 from rainbowio import colorwheel
-import adafruit_pca9685
+
 import adafruit_rgbled
 
 # PCA9685 Initialization
